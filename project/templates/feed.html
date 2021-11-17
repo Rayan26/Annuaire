@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="has-text-left">
+
+    <!-- Bouton d'ajout -->
+    <div class="columns">
+        <div class="column is-half">
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+            {% if category == 'post-success' %}
+            <div class="notification is-success">
+                {{ message }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            <div class="box">
+                <label class="label has-text-black title is-4">Nouveau post</label>
+                <form class="is-medium" method="POST" action="/feed/message">
+                    <textarea class="is-4 textarea mb-1 has-fixed-size is-primary"
+                              placeholder='"There are two hard things in computer science: cache invalidation, naming things, and off-by-one errors." - Jeff Atwood '
+                              rows="1"
+                              name="post_content"></textarea>
+                    <input class="is-2 button mb-2" type="submit" name="post_message" value="Poster">
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Fil d'actualité -->
+    <div class="columns">
+        <!-- Messages -->
+        <div class="column is-three-quarters box">
+            {% for p in posts_user %}
+            <div class="box is-primary">
+                <article class="media">
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>{{ p.User.name }}</strong>
+                                <small>@{{ p.User.name }}</small>
+                                <small>{{ p.Post.date.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                                <br>
+                                {{ p.Post.content }}
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Recherche de follow -->
+        <div class="column">
+            <div class="box">
+                <form method="POST" action="/feed/follow">
+                    <label class="label title is-4 has-text-black">Suivre un ami :</label>
+                    <input class="input is-primary is-large" type="text" name="name_follow" placeholder="Nom">
+                    <input class="is-2 button mb-2 mt-1" type="submit" name="post_follow" value="Suivre">
+                </form>
+                <!-- Notification -->
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                {% if category == 'follow-success' %}
+                <div class="notification is-success">
+                    {{ message }}
+                </div>
+                {% endif %}
+                {% if category == 'follow-error' %}
+                <div class="notification is-danger">
+                    {{ message }}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="box">
+                <label class="label title is-4 has-text-black">Liste des contacts :</label>
+                <div class="box">
+                    <table>
+                        <tbody>
+                        {% for c in contacts %}
+                        <tr>
+                            <td class="columns">
+                                <label class="column is-three-quarter">{{ c.name }}</label>
+
+                                <form class="is-inline column" method="POST" action="/feed/unfollow">
+                                    <button class="button is-danger is-outlined" name="unf_name" value="{{ c.name }}">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
