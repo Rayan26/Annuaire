@@ -10,7 +10,7 @@ from front_service.models import as_user, as_post, as_name
 
 main = Blueprint('main', __name__)
 
-URL_AUTH = 'http://auth_service:5001'
+URL_AUTH = 'http://127.0.0.1:5001'
 URL_FEED = 'http://feed_service:5002'
 headers = {
     'Content-Type': 'application/json'
@@ -36,11 +36,11 @@ def login():
         r = requests.post(URL_AUTH + '/login', headers=headers, data=data)
         res = r.json()
 
-        if res['result'] == 'error':
+        if res['status'] == 'error':
             flash(res['data'])
             return redirect(url_for('main.login'))  # if the user doesn't exist or password is wrong, reload the page
         else:
-            user = as_user(res['data'])
+            user = as_user(res['data'][0])
             login_user(user, remember=remember)
             return redirect(url_for('main.index'))
 
@@ -53,18 +53,20 @@ def signup():
         email = request.form.get('email')
         name = request.form.get('name')
         password = request.form.get('password')
+        phone = request.form.get('phone')
 
         data = json.dumps(dict(
             email=email,
             name=name,
-            password=password
+            password=password,
+            phone=phone
         ))
         r = requests.post(URL_AUTH + '/signup', headers=headers, data=data)
         res = r.json()
 
-        print(res['result'])
-        if res['result'] == 'error':
-            flash('Email address already exists')
+        print(res['status'])
+        if res['status'] == 'error':
+            flash(res['data'])
             return redirect(url_for('main.signup'))
         else:
             return redirect(url_for('main.login'))
