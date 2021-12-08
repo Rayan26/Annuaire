@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_login import LoginManager
 from flask_mysqldb import MySQL
@@ -5,13 +6,13 @@ from flask_mysqldb import MySQL
 # init SQLAlchemy so we can use it later in our models
 mysql = MySQL()
 
+
 def create_app():
     app = Flask(__name__)
-    app.config['MYSQL_HOST'] = 'localhost'
-    app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = ''
-    app.config['MYSQL_DB'] = 'annuaire'
-    app.config['SECRET_KEY'] = 'MyDB'
+    app.config['MYSQL_HOST'] = os.environ['MYSQL_HOST']
+    app.config['MYSQL_USER'] = os.environ['MYSQL_USER']
+    app.config['MYSQL_PASSWORD'] = os.environ['MYSQL_PASSWORD']
+    app.config['MYSQL_DB'] = os.environ['MYSQL_DB']
 
     mysql.init_app(app)
 
