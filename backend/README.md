@@ -1,7 +1,6 @@
 pip install requirements.txt
 
 #Dans un terminal :
-cd backend
 export FLASK_APP=backend
 export FLASK_DEBUG=1
 cd ..

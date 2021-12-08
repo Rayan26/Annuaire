@@ -1,25 +1,21 @@
+version: '2.0'
 services:
 
   front_service:
-    image: front_service
+    build: './frontend'
+    image: frontend
     ports:
       - 5000:5000
     networks:
       - net
 
   auth_service:
-    image: auth_service
+    build: './backend'
+    image: backend
     ports:
       - 5001:5001
     networks:
       - net
 
-  feed_service:
-    image: feed_service
-    ports:
-      - 5002:5002
-    networks:
-      - net
-
 networks:
-  net: { }
+  net:

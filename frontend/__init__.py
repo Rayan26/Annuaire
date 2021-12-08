@@ -5,14 +5,15 @@ from flask import Flask
 from flask_login import LoginManager
 
 # init SQLAlchemy so we can use it later in our models
-from front_service.models import as_user
+from frontend.models import as_user
 
 
 def create_app():
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
+    app.static_folder = 'static'
 
     login_manager = LoginManager()
     login_manager.login_view = 'main.login'
@@ -26,7 +27,7 @@ def create_app():
         url = "http://127.0.0.1:5001/load_user2"
 
         payload = json.dumps(
-            dict(id_user=user_id)
+            dict(user_id=user_id)
         )
         headers = {
             'Content-Type': 'application/json'

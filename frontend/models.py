@@ -8,16 +8,31 @@ class User(UserMixin):
     email: str
     password: str
     name: str
+    phone: str
+    role: str
+    job: str
+    location: str
 
-    def __init__(self, id, email, password, name):
+    def __init__(self, id, email, password, name, phone, role, job, location):
         self.id = id
         self.email = email
         self.password = password
         self.name = name
+        self.role = role
+        self.phone = phone
+        self.job = job
+        self.location = location
 
 
 def as_user(json):
-    return User(json['id'], json['email'], json['password'], json['name'])
+    return User(json['id'],
+                json['email'],
+                json['password'],
+                json['name'],
+                json['phone'],
+                json['role'],
+                json['job'],
+                json['location'])
 
 
 def as_datetime(str_date):

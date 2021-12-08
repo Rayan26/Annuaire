@@ -1,104 +1,289 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="has-text-left">
 
-    <!-- Bouton d'ajout -->
-    <div class="columns">
-        <div class="column is-half">
-            {% for category, message in get_flashed_messages(with_categories=True) %}
-            {% if category == 'post-success' %}
-            <div class="notification is-success">
-                {{ message }}
-            </div>
-            {% endif %}
-            {% endfor %}
-            <div class="box">
-                <label class="label has-text-black title is-4">Nouveau post</label>
-                <form class="is-medium" method="POST" action="/feed/message">
-                    <textarea class="is-4 textarea mb-1 has-fixed-size is-primary"
-                              placeholder='"There are two hard things in computer science: cache invalidation, naming things, and off-by-one errors." - Jeff Atwood '
-                              rows="1"
-                              name="post_content"></textarea>
-                    <input class="is-2 button mb-2" type="submit" name="post_message" value="Poster">
-                </form>
-            </div>
 
-        </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.min.css') }}">
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="notification is-danger">
+    {{ messages[0] }}.
+</div>
+{% endif %}
+{% endwith %}
+
+
+<form method="POST" action="book">
+    <div class="field has-addons">
+        <p class="control">
+            <input class="input" type="text" name="name" placeholder="Search students">
+        </p>
+        <p class="control">
+            <button class="button" type="submit">
+                Search
+            </button>
+        </p>
     </div>
+</form>
 
+{% if current_user.role == 'ADMIN' %}
+<button class="button is-success add_user" onclick="openCreateModal()">
+    <span class="icon is-small">
+      <i class="fas fa-plus"></i>
+    </span>
+        <span>Add</span>
+</button>
+{% endif %}
 
-    <!-- Fil d'actualité -->
-    <div class="columns">
-        <!-- Messages -->
-        <div class="column is-three-quarters box">
-            {% for p in posts_user %}
-            <div class="box is-primary">
-                <article class="media">
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>{{ p.User.name }}</strong>
-                                <small>@{{ p.User.name }}</small>
-                                <small>{{ p.Post.date.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-                                <br>
-                                {{ p.Post.content }}
-                            </p>
+<div class="table-wrapper has-mobile-cards">
+    <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Job</th>
+            <th>Location</th>
+            <th>Phone</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if users != 'User not found' %}
+        {% for user in users %}
+        <tr>
+            <td class="is-image-cell">
+                <div class="image">
+                    <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="is-rounded">
+                </div>
+            </td>
+            <td data-label="Name">{{ user.name }}</td>
+            <td data-label="Contact">{{ user.email }}</td>
+            <td data-label="Job">{{ user.job }}</td>
+            <td data-label="Location">{{ user.location }}</td>
+            <td data-label="Phone">{{ user.phone }}</td>
+            {% if current_user.role == 'ADMIN' %}
+            <td class="is-actions-cell">
+                <div class="buttons is-right">
+                    <button class="button is-small is-primary" type="button" onclick="openEditModal({{ user.id }})">
+                        <span class="icon"><i class="mdi mdi-eye"></i></span>
+                    </button>
+                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button"
+                            onclick="openWarningModal({{ user.id }})">
+                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                    </button>
+                </div>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <h1>No student available</h1>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Create User Modal -->
+    <div class="modal " id="create_modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Create User</p>
+                <button onclick="closeCreateModal()" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <form id="create_form" method="POST" action="/signup">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
                         </div>
                     </div>
-                </article>
-            </div>
-            {% endfor %}
-        </div>
 
-        <!-- Recherche de follow -->
-        <div class="column">
-            <div class="box">
-                <form method="POST" action="/feed/follow">
-                    <label class="label title is-4 has-text-black">Suivre un ami :</label>
-                    <input class="input is-primary is-large" type="text" name="name_follow" placeholder="Nom">
-                    <input class="is-2 button mb-2 mt-1" type="submit" name="post_follow" value="Suivre">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="text" name="name" placeholder="Name" autofocus="">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="text" name="phone" placeholder="Phone" autofocus="">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="text" name="job" placeholder="Job" autofocus="">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="text" name="location" placeholder="Location"
+                                   autofocus="">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-success">
+                                <select name="role" id="role">
+                                    <option>Select dropdown</option>
+                                    <option>USER</option>
+                                    <option>ADMIN</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
-                <!-- Notification -->
-                {% for category, message in get_flashed_messages(with_categories=True) %}
-                {% if category == 'follow-success' %}
-                <div class="notification is-success">
-                    {{ message }}
-                </div>
-                {% endif %}
-                {% if category == 'follow-error' %}
-                <div class="notification is-danger">
-                    {{ message }}
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-
-            <div class="box">
-                <label class="label title is-4 has-text-black">Liste des contacts :</label>
-                <div class="box">
-                    <table>
-                        <tbody>
-                        {% for c in contacts %}
-                        <tr>
-                            <td class="columns">
-                                <label class="column is-three-quarter">{{ c.name }}</label>
-
-                                <form class="is-inline column" method="POST" action="/feed/unfollow">
-                                    <button class="button is-danger is-outlined" name="unf_name" value="{{ c.name }}">
-                                        <span class="icon is-small">
-                                            <i class="fas fa-times"></i>
-                                        </span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button onclick="submitCreateForm()" class="button is-success">Create</button>
+                <button onclick="closeCreateModal()" class="button">Cancel</button>
+            </footer>
         </div>
     </div>
+
+
+    <!-- Edit User Modal -->
+    <div class="modal " id="edit_modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Edit User</p>
+                <button onclick="closeEditModal()" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <form id="edit_form" method="POST" action="/updateUser">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" type="password" name="new_mdp"
+                                   placeholder="Nouveau mot de passe">
+                        </div>
+                    </div>
+                    <input type="hidden" name="user_id" id="edit" value="0"/>
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-success">
+                                <select name="role" id="new_role">
+                                    <option>Select dropdown</option>
+                                    <option>USER</option>
+                                    <option>ADMIN</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            <footer class="modal-card-foot">
+                    <button onclick="submitEditForm()" class="button is-success">Save changes</button>
+                <button onclick="closeEditModal()" class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal " id="warning_modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Remove account</p>
+                <button onclick="closeWarningModal()" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <h2 style="color:black">Are you sure you want to remove your account ?</h2>
+            </section>
+            <footer class="modal-card-foot">
+                <form method="POST" action="remove">
+                    <input type="hidden" name="user_id" id="remove" value="0"/>
+                    <button class="button is-danger">Continue</button>
+                </form>
+                <button onclick="closeWarningModal()" class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+
 </div>
+
+<!-- Icons below are for demo-only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+
+<script type="text/javascript">
+
+function openCreateModal() {
+  var element = document.getElementById("create_modal");
+  element.classList.add("is-active");
+}
+
+function closeCreateModal() {
+  var element = document.getElementById("create_modal");
+  element.classList.remove("is-active");
+}
+
+function openEditModal(user_id) {
+  var element = document.getElementById("edit_modal");
+  element.classList.add("is-active");
+
+  var element = document.getElementById("edit");
+  element.setAttribute("value", user_id);
+}
+
+function closeEditModal() {
+  var element = document.getElementById("edit_modal");
+  element.classList.remove("is-active");
+}
+
+function openWarningModal(user_id) {
+  var element = document.getElementById("warning_modal");
+  element.classList.add("is-active");
+
+
+  var element = document.getElementById("remove");
+  element.setAttribute("value", user_id);
+}
+
+function closeWarningModal() {
+  var element = document.getElementById("warning_modal");
+  element.classList.remove("is-active");
+}
+
+function submitCreateForm() {
+  var form = document.getElementById("create_form");
+  form.submit();
+}
+
+function submitEditForm() {
+  var form = document.getElementById("edit_form");
+  form.submit();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 {% endblock %}
