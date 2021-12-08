@@ -1,25 +1,36 @@
+version: '2.0'
 services:
 
-  front_service:
-    image: front_service
+  frontend:
+    image: frontend
     ports:
       - 5000:5000
     networks:
       - net
 
-  auth_service:
-    image: auth_service
+  backend:
+    image: backend
     ports:
       - 5001:5001
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DB: annuaire
     networks:
       - net
 
-  feed_service:
-    image: feed_service
-    ports:
-      - 5002:5002
+  db:
+    image: mysql:5.7
     networks:
       - net
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: annuaire
+    volumes:
+      - ./mysql-load:/docker-entrypoint-initdb.d
 
 networks:
-  net: { }
+  net:

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %} <!-- User connecté-->
+
+<div class="column is-4 is-offset-4">
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    {% if category == 'psw-success' %}
+    <div class="notification is-success">
+        {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<h1 class="title">
+    Polytech Student Book
+</h1>
+<h2 class="subtitle">
+    Bonjour {{ user.name }} 😊
+</h2>
+{% else %} <!-- User pas connecté -->
+<h1 class="title">
+    Polytech Student Book
+</h1>
+<h2 class="subtitle">
+    Connectez vous pour accéder à l'annuaire. 😊
+</h2>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for category, message in get_flashed_messages(with_categories=True) %}
+<div class="notification is-danger">
+    {{ message }}
+</div>
+{% endfor %}
+
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Changer de mot de passe</h3>
+    <form method="POST" action="/updateUser">
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" type="password" name="mdp" placeholder="Mot de passe actuel" autofocus="">
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" type="password" name="new_mdp" placeholder="Nouveau mot de passe">
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <input class="input is-large" type="password" name="new_mdp2" placeholder="Confirmer mot de passe">
+            </div>
+        </div>
+
+        <input class="button is-block is-info is-large is-fullwidth" type="submit" value="Enregistrer">
+    </form>
+</div>
+
+<div class="column is-4 is-offset-4">
+    <input onclick="openWarningModal()" class="button is-block is-danger is-large is-fullwidth" type="submit"
+           value="Supprimer votre compte">
+</div>
+
+<div class="modal " id="warning_modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Remove account</p>
+            <button onclick="closeWarningModal()" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <h2 style="color:black">Are you sure you want to remove your account ?</h2>
+        </section>
+        <footer class="modal-card-foot">
+            <form method="POST" action="remove">
+                <button class="button is-danger">Continue</button>
+            </form>
+            <button onclick="closeWarningModal()" class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
+
+<script type="text/javascript">
+function openWarningModal() {
+  var element = document.getElementById("warning_modal");
+  element.classList.add("is-active");
+}
+
+function closeWarningModal() {
+  var element = document.getElementById("warning_modal");
+  element.classList.remove("is-active");
+}
+
+</script>
+{% endblock %}
