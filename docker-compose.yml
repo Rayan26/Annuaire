@@ -30,7 +30,8 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: annuaire
     volumes:
-      - ./mysql-load:/docker-entrypoint-initdb.d
+      - ./mysql-load:
+      - ù/docker-entrypoint-initdb.d
 
 networks:
   net:
