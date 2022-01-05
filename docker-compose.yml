@@ -30,8 +30,7 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: annuaire
     volumes:
-      - ./mysql-load:
-      - ù/docker-entrypoint-initdb.d
+      - ./data:/var/lib/mysql #cheminlocal:cheminconteneur
 
 networks:
   net:
