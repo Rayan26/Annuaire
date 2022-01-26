@@ -6,9 +6,11 @@ services:
     ports:
       - 5000:5000
     networks:
-      - net1
+      - net:
+          ipv4_address: 172.20.0.2
     extra_hosts:
       - "firewall:192.168.1.1"
+
 
   backend:
     image: backend
@@ -20,14 +22,16 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DB: annuaire
     networks:
-      - net2
+      - net:
+          ipv4_address: 172.20.0.3
     extra_hosts:
       - "firewall:192.168.10.1"
 
   db:
     image: mysql:5.7
     networks:
-      - net3
+      - net:
+          ipv4_address: 172.20.0.4
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
@@ -35,8 +39,12 @@ services:
       MYSQL_DATABASE: annuaire
     volumes:
       - ./data:/var/lib/mysql #cheminlocal:cheminconteneur
+    extra_hosts:
+      - "firewall:192.168.10.1"
 
 networks:
-  net1:
-  net2:
-  net3:
+  net:
+    driver: bridge
+        ipam:
+         config:
+          - subnet: 172.20.0.0/24
