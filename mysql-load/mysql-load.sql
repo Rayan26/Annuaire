@@ -18,6 +18,6 @@ INSERT INTO `user` (`email`, `password`, `name`, `phone`, `id`, `role`, `job`, `
 ('kallabrayan@gmail.com', 'sha256$BWBUtpBRxAY31zyV$05340c4597426bb65ad2502701c8b49175829d32e6262d2d1461556a1839b318', 'Rayan', '0677896578', 20, 'ADMIN', 'Student', '12 Avenue Luminy'),
 ('somone@yahoo.com', 'sha256$xONSGnVJNa3Ur6Y8$9ed8f69044f31f033e609757bbc541c52b7d42727fc04e7d00f2656acfe7a8eb', 'MyTube', '0688896668', 21, 'USER', 'Administator', '66 Pl Av des Hommes'),
 ('r@r', 'sha256$Xze3lXlyDML1c1t2$3e7f6a0f3c719c95cfaa1197a8702a0f7e2b65f59434c37fb4f2e950ac5f26a3', 'rrr', 'rrr', 22, 'ADMIN', 'rrr', 'rrr'),
-('user@gmail.com', 'sha256$lLMsddTYAJFm8f6r$d6e2db0f0a6aab79bd661ddae645221637490724dac17ac4fdd668625a5f5a0f', 'user', '0688896668', 23, 'USER', 'uSER', '66 Pl Av des Hommes'),
+('user@gmail.com', 'sha256$BWBUtpBRxAY31zyV$05340c4597426bb65ad2502701c8b49175829d32e6262d2d1461556a1839b318', 'user', '0688896668', 23, 'USER', 'uSER', '66 Pl Av des Hommes'),
 ('qq@qq', 'sha256$6NJsQ18e6QCkVU40$75a971cac5e56b9b9bb2c629620a958b124399ea64db7d09990aed16f6a3f9de', 'qq', '0677896578', 24, 'ADMIN', 'Enginer', 'qqqq'),
 ('dddd@f', 'sha256$wFMhLOYhIi8UFoYu$4cd9f3e7924eb41ae14c851fd196a2c42a2e8873819271949f8f7348f5385476', 'Rayan', '0677896578', 25, 'USER', 'Enginer', '12 Avenue Luminy');
