@@ -16,6 +16,9 @@ services:
     networks:
       DMZ:
         ipv4_address: 192.168.20.10
+    extra_hosts:
+      - "ifDMZ:192.168.20.1"
+
 
   backend:
     image: backend
@@ -29,6 +32,8 @@ services:
     networks:
       BACK:
         ipv4_address: 192.168.10.10
+    extra_hosts:
+      - "ifBACK:192.168.10.1"
 
 
   db:
