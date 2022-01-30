@@ -20,6 +20,14 @@ flask run -p 5000
 
 
 #Pour la dockerisation (TODO)
+# Fabriquer les réseaux Docker 
+```angular2html
+docker network create --gateway 192.168.20.1 --subnet 192.168.20.0/24 DMZ
+docker network create --gateway 192.168.10.1 --subnet 192.168.10.0/24 BACK
+docker network create --gateway 192.168.30.1 --subnet 192.168.30.0/24 DATA
+```
+
+
 # Fabriquer l'image
 ```
 docker build -t docker-example .

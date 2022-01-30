@@ -1,12 +1,21 @@
 version: '2.0'
-services:
 
+networks:
+  DMZ:
+    external: true
+  BACK:
+    external: true
+  DATA:
+    external: true
+
+services:
   frontend:
     image: frontend
     ports:
       - 5000:5000
     networks:
-      - net
+      DMZ:
+        ipv4_address: 192.168.20.10
 
   backend:
     image: backend
@@ -18,12 +27,13 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DB: annuaire
     networks:
-      - net
+      BACK:
+        ipv4_address: 192.168.10.10
+
 
   db:
     image: mysql:5.7
-    networks:
-      - net
+
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
@@ -31,6 +41,6 @@ services:
       MYSQL_DATABASE: annuaire
     volumes:
       - ./data:/var/lib/mysql #cheminlocal:cheminconteneur
-
-networks:
-  net:
+#    networks:
+#      DATA:
+#        ipv4_address: 192.168.30.10
