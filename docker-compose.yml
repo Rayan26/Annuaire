@@ -1,37 +1,29 @@
-version: '2.0'
+version: '2.4'
 services:
-
   frontend:
     image: frontend
     ports:
-      - 5000:5000
+      - 192.168.0.2:5000
     networks:
-      - net:
-          ipv4_address: 172.20.0.2
-    extra_hosts:
-      - "firewall:192.168.1.1"
-
+      vlan:
+        ipv4_address: 192.168.0.2
 
   backend:
     image: backend
     ports:
-      - 5001:5001
+      - 192.168.0.3:5001
     environment:
       MYSQL_HOST: db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DB: annuaire
     networks:
-      - net:
-          ipv4_address: 172.20.0.3
-    extra_hosts:
-      - "firewall:192.168.10.1"
+      vlan:
+        ipv4_address: 192.168.0.3
+
 
   db:
     image: mysql:5.7
-    networks:
-      - net:
-          ipv4_address: 172.20.0.4
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
@@ -39,12 +31,20 @@ services:
       MYSQL_DATABASE: annuaire
     volumes:
       - ./data:/var/lib/mysql #cheminlocal:cheminconteneur
-    extra_hosts:
-      - "firewall:192.168.10.1"
+    networks:
+      vlan:
+        ipv4_address: 192.168.0.4
 
 networks:
-  net:
-    driver: bridge
-        ipam:
-         config:
-          - subnet: 172.20.0.0/24
+  dockervlan:
+    name: frontend
+    driver: macvlan
+    driver_opts:
+      parent: ens224
+    ipam:
+      config:
+        - subnet: "192.168.20.0/24"
+          gateway: "192.168.20.1"
+
+
+
