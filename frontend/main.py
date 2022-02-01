@@ -10,7 +10,7 @@ from frontend.models import as_user, as_post, as_name
 
 main = Blueprint('main', __name__)
 
-URL_BACK = 'http://backend:5001'
+URL_BACK = 'http://192.168.10.2:5001'
 
 headers = {
     'Content-Type': 'application/json'

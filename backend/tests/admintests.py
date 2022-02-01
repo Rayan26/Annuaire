@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import requests
 
-URL_BACK = 'http://backend:5001'
+URL_BACK = 'http://192.168.10.2:5001'
 
 
 class TestAdminCanRemove(unittest.TestCase):
