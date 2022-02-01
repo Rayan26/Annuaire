@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.8-slim-buster
+FROM python:3.8-buster
 WORKDIR /flask/backend
 ENV FLASK_APP=backend
 ENV FLASK_RUN_HOST=0.0.0.0
