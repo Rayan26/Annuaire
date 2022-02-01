@@ -3,23 +3,25 @@ services:
   frontend:
     image: frontend
     ports:
-      - 192.168.0.2:5000
+      - 5000:5000
     networks:
-      vlan:
-        ipv4_address: 192.168.0.2
+      frontend-network:
+        ipv4_address: 192.168.20.2
+    restart: on-failure
 
   backend:
     image: backend
     ports:
-      - 192.168.0.3:5001
+      - 5001:5001
     environment:
       MYSQL_HOST: db
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DB: annuaire
     networks:
-      vlan:
-        ipv4_address: 192.168.0.3
+      backend-network:
+        ipv4_address: 192.168.10.2
+    restart: on-failure
 
 
   db:
@@ -32,12 +34,14 @@ services:
     volumes:
       - ./data:/var/lib/mysql #cheminlocal:cheminconteneur
     networks:
-      vlan:
-        ipv4_address: 192.168.0.4
+      db-network:
+        ipv4_address: 192.168.30.2
+    ports:
+      - 3307:3306
 
 networks:
-  dockervlan:
-    name: frontend
+  frontend-network:
+    name: frontend-network
     driver: macvlan
     driver_opts:
       parent: ens224
@@ -46,5 +50,23 @@ networks:
         - subnet: "192.168.20.0/24"
           gateway: "192.168.20.1"
 
+  backend-network:
+    name: backend-network
+    driver: macvlan
+    driver_opts:
+      parent: ens192
+    ipam:
+      config:
+        - subnet: "192.168.10.0/24"
+          gateway: "192.168.10.1"
 
+  db-network:
+    name: db-network
+    driver: macvlan
+    driver_opts:
+      parent: ens256
+    ipam:
+      config:
+        - subnet: "192.168.30.0/24"
+          gateway: "192.168.30.1"
 
