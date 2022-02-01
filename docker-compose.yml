@@ -37,7 +37,7 @@ services:
       db-network:
         ipv4_address: 192.168.30.2
     ports:
-      - 3307:3306
+      - 3306:3306
 
 networks:
   frontend-network:
