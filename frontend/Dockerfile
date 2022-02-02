@@ -5,9 +5,9 @@ ENV FLASK_APP=frontend
 ENV FLASK_RUN_HOST=0.0.0.0
 RUN apt-get update
 RUN apt-get upgrade
-RUN apt-get install inetutils-ping
-RUN apt-get install traceroute
-RUN apt-get install iproute2
+RUN apt-get install inetutils-ping -y
+RUN apt-get install traceroute -y
+RUN apt-get install iproute2 -y
 RUN apt-get install libmariadb-dev -y
 RUN apt-get install gnutls-bin -y
 RUN apt-get install openssl -y
