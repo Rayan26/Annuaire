@@ -3,7 +3,7 @@ CREATE TABLE `user` (
   `password` varchar(250) NOT NULL,
   `name` varchar(250) NOT NULL,
   `phone` varchar(255) NOT NULL,
-  `id` int NOT NULL,
+  `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `role` varchar(250) NOT NULL,
   `job` varchar(255) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL
