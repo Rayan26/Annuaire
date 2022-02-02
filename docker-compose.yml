@@ -32,7 +32,7 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: annuaire
     volumes:
-      - ./mysql-load:/var/lib/mysql #cheminlocal:cheminconteneur
+      - ./mysql-load:/docker-entrypoint-initdb.d
     networks:
       db-network:
         ipv4_address: 192.168.30.2
